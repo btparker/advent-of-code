@@ -1,9 +1,11 @@
 use std::fs::File;
+use std::path::PathBuf;
 use std::io::BufReader;
 use std::io::BufRead;
+use std::env;
 
-fn load_from_file(file_path: &str) -> Vec<i64>{
-    let file = File::open(file_path).expect("file wasn't found.");
+fn load_from_file(path: PathBuf) -> Vec<i64>{
+    let file = File::open(&path).expect("file wasn't found.");
     let reader = BufReader::new(file);
 
     return reader
@@ -54,8 +56,15 @@ fn part_two(depth_measurements: Vec<i64>) {
     println!("{:?}", result);
 }
 
-fn main() {
-    let depth_measurements: Vec<i64> = load_from_file("input.txt");
+fn run(path: PathBuf){
+    let depth_measurements: Vec<i64> = load_from_file(path);
     part_one(depth_measurements.clone());
     part_two(depth_measurements.clone());
+}
+
+fn main(){
+    let args: Vec<String> = env::args().collect();
+    let input_path = PathBuf::from(&args[1]);
+    println!("-- Running Day01 on {:?} --", input_path);
+    run(input_path);
 }
